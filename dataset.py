@@ -23,6 +23,21 @@ POSITIVE_WORDS = [
     "chill",
     "relaxed",
     "amazing",
+    "hopeful",
+    "proud",
+    "grateful",
+    # slang
+    "lit",
+    "fire",
+    "goated",
+    "bussin",
+    "slay",
+    "dope",
+    "hyped",
+    "stoked",
+    "pumped",
+    "vibe",
+    "vibing",
 ]
 
 NEGATIVE_WORDS = [
@@ -36,6 +51,24 @@ NEGATIVE_WORDS = [
     "stressed",
     "hate",
     "boring",
+    "bored",
+    "annoy",
+    "annoyed",
+    "annoying",
+    "stressful",
+    "poorly",
+    "anxious",
+    "nervous",
+    # slang
+    "mid",
+    "cooked",
+    "ugh",
+    "lame",
+    "trash",
+    "sucks",
+    "exhausted",
+    "drained",
+    "cringe",
 ]
 
 # ---------------------------------------------------------------------
@@ -50,6 +83,17 @@ SAMPLE_POSTS = [
     "This is fine",
     "So excited for the weekend",
     "I am not happy about this",
+    "I love this food",
+    "My day was okay",
+    "My interview went poorly, but it was a learning experience",
+    "I'm so bored",
+    "I'm so angry I could cry",
+    "Today was chill",
+    "🤣",
+    "That assignment was stressful, but I'm happy i got it out of the way",
+    "😐",
+    "He's lowkey starting to annoy me",
+    "oh, great. It's raining on the one day i have somewhere to go",
 ]
 
 # Human labels for each post above.
@@ -61,10 +105,21 @@ SAMPLE_POSTS = [
 TRUE_LABELS = [
     "positive",  # "I love this class so much"
     "negative",  # "Today was a terrible day"
-    "mixed",     # "Feeling tired but kind of hopeful"
-    "neutral",   # "This is fine"
+    "mixed",  # "Feeling tired but kind of hopeful"
+    "neutral",  # "This is fine"
     "positive",  # "So excited for the weekend"
     "negative",  # "I am not happy about this"
+    "positive",  # "I love this food"
+    "neutral",  # "My day was okay"
+    "mixed",  # "My interview went poorly, but it was a learning experience"
+    "negative",  # "I'm so bored"
+    "negative",  # "I'm so angry I could cry"
+    "positive",  # "Today was chill"
+    "positive",  # "🤣
+    "mixed",  # "That assigment was stressful, but I'm happy i got it out of the way"
+    "neutral",  # "😐"
+    "negative",  # "He's lowkey starting to annoy me"
+    "negative",  # oh, great. It's raining on the one day i have somewhere to go"
 ]
 
 # TODO: Add 5-10 more posts and labels.
@@ -92,3 +147,27 @@ TRUE_LABELS = [
 #
 # Remember to keep them aligned:
 #   len(SAMPLE_POSTS) == len(TRUE_LABELS)
+
+# ---------------------------------------------------------------------
+# Informal / slang / hard examples (added for the dataset TODO)
+# ---------------------------------------------------------------------
+
+_EXTRA_POSTS = [
+    ("ngl this pizza is bussin", "positive"),
+    ("lowkey cooked for this exam tomorrow", "negative"),
+    ("that concert was lit, no cap", "positive"),
+    ("ugh mondays, so mid", "negative"),
+    ("meh, it is what it is", "neutral"),
+    ("I'm so hyped but lowkey nervous", "mixed"),
+    ("this day sucks \U0001F62D", "negative"),
+    # Hard: sarcasm with no cue phrase the model knows.
+    ("wow I just love waiting two hours in traffic", "negative"),
+    # Hard: sarcasm cue fires, but there is no positive word to flip.
+    ("thanks a lot, my phone died right before the call", "negative"),
+]
+
+for _post, _label in _EXTRA_POSTS:
+    SAMPLE_POSTS.append(_post)
+    TRUE_LABELS.append(_label)
+
+assert len(SAMPLE_POSTS) == len(TRUE_LABELS)

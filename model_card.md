@@ -101,6 +101,26 @@ Examples:
 - It cannot detect sarcasm reliably  
 - It depends heavily on the words you chose or labeled
 
+**Informal language and slang:** The model works best on clear, explicit
+statements ("I love this class", "today was a terrible day") and worst on
+slang and casual phrasing. "Neutral" is the default when no word matches, so a
+neutral prediction often means "no recognized words" rather than "no
+sentiment". I added a batch of slang words (`lit`, `bussin`, `cooked`, `mid`,
+`sucks`, ...) and informal example posts, which helped, but a fixed list can
+only cover words someone thought of. Some slang is also ambiguous (`fire`,
+`sick`, `dead`), and intensifiers like "lowkey" and "no cap" carry no polarity
+of their own, so they are ignored.
+
+**Sarcasm (partial fix only):** `MoodAnalyzer` has a small list of sarcasm
+cue phrases (`SARCASM_CUES` in `mood_analyzer.py`, e.g. "oh great",
+"yeah right", "sure is"). When one appears, the score is flipped. This fixes
+"oh, great. It's raining on the one day i have somewhere to go", but it only
+works for cues someone thought to list. It still fails when the sarcasm
+comes from the situation, not the words: "well, he's a jolly little fellow,
+isn't he" said about a grumpy person reads as positive because nothing in the
+sentence signals it. It can also flip sincere text, e.g. "that sure is nice".
+Reliable sarcasm detection needs context beyond a single sentence.
+
 ## 7. Ethical Considerations
 
 Discuss any potential impacts of using mood detection in real applications.  
