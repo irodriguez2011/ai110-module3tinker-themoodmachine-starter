@@ -80,16 +80,50 @@ Weaknesses might include overfitting to the training data or picking up spurious
 
 ## 5. Evaluation
 
+## 5. Evaluation
+
 **How you evaluated the model:**  
-Both versions can be evaluated on the labeled posts in `dataset.py`.  
-Describe what accuracy you observed.
+I compared both models on the 26 labeled posts in `dataset.py`. The rule-based
+model scored 88% (23/26) and the ML model (bag-of-words + logistic regression)
+scored 92% (24/26). Both scores are training accuracy: each model was scored on
+the same posts it was built from, with no held-out test set, so they overstate
+how well either model would do on new text. Per class, the rule-based model's
+weakest spot is recall on negative (0.82): it missed 2 of 11 negative posts,
+both cases of disguised negativity. That matters most if this were used to
+flag users who are upset.
 
 **Examples of correct predictions:**  
-Provide 2 or 3 examples and explain why they were correct.
+- "I am not happy about this" -> negative (rule-based). The negation rule flips
+  "happy" from positive to negative.
+- "ngl this pizza is bussin" -> positive (rule-based). "bussin" is in the slang
+  words I added to the positive list.
+- "oh, great. It's raining on the one day i have somewhere to go" -> negative
+  (rule-based). "oh great" is a sarcasm cue, so the score is flipped.
 
 **Examples of incorrect predictions:**  
-Provide 2 or 3 examples and explain why the model made a mistake.  
-If you used both models, show how their failures differed.
+Rule-based model:
+- "wow I just love waiting two hours in traffic" -> positive (true: negative).
+  "love" scores positive, and there's no sarcasm cue phrase to flip it. The
+  sarcasm comes from the situation, not the words.
+- "thanks a lot, my phone died right before the call" -> neutral (true:
+  negative). Neither "thanks" nor "died" is in the word lists, so the score is
+  0 and it defaults to neutral.
+- "My interview went poorly, but it was a learning experience" -> negative
+  (true: mixed). "poorly" counts as negative, but "learning experience" isn't
+  in the positive list, so the positive half doesn't register.
+
+ML model:
+- "🤣" -> negative (true: positive) and "😐" -> negative (true: neutral).
+  CountVectorizer only keeps word tokens, so emoji-only posts become empty and
+  the model falls back to the most common label (negative, 11 of 26 posts).
+- It got both sarcasm posts right, but only because it was trained on those
+  exact sentences. On new text it learned a spurious cue: "day" appears mostly
+  in negative posts, so "what a great day" and "I love this day" are both
+  predicted negative.
+
+How the failures differ: the rule-based model handles emojis but misses
+sarcasm without a cue phrase. The ML model can't see emojis at all and picks up
+shortcuts from word frequency instead of meaning.
 
 ## 6. Limitations
 
